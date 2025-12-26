@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:sec="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head.html :: head" />
+
+<body class="text-gray-900">
+    <nav th:replace="fragments/layout :: header"></nav>
+
+    <main layout:insert="fragments/layout :: content" class="container max-w-xl mx-auto my-4">
+
+        <!-- Logo Section -->
+        <div class="flex justify-center mb-8">
+            <img th:src="@{/images/Logo klinik agus mantri 4.png}" alt="Klinik Agus Mantri Logo"
+                class="w-[200px] h-[200px]">
+        </div>
+
+        <!-- Staff Dashboard (Only visible to staff) -->
+        <div sec:authorize="hasAuthority('staff')" class="mb-6 p-4 bg-gray-100 rounded-lg border border-gray-200">
+            <h2 class="text-xl font-bold mb-4">Staff Dashboard</h2>
+            <div class="flex space-x-4">
+                <a th:href="@{/staff/doctors/new}"
+                    class="flex-1 bg-blue-600 text-white text-center py-2 rounded hover:bg-blue-700 transition duration-150">
+                    <i class="bi-person-plus-fill mr-2"></i>Tambah Dokter
+                </a>
+                <a th:href="@{/staff/patients/new}"
+                    class="flex-1 bg-green-600 text-white text-center py-2 rounded hover:bg-green-700 transition duration-150">
+                    <i class="bi-person-plus-fill mr-2"></i>Tambah Pasien
+                </a>
+                <a th:href="@{/staff/patients/search}"
+                    class="flex-1 bg-indigo-600 text-white text-center py-2 rounded hover:bg-indigo-700 transition duration-150">
+                    <i class="bi-calendar-plus-fill mr-2"></i>Booking ulang Pasien
+                </a>
+            </div>
+        </div>
+
+    </main>
+</body>
+
+</html>

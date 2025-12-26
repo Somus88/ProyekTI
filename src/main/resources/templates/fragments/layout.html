@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:sec="http://www.thymeleaf.org">
+
+<head th:replace="head :: head" />
+
+<body class="text-gray-900">
+    <nav th:fragment="header" class="p-8 bg-white border-b-2" style="border-color: #00B5E2;">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="/"
+                class="text-lg font-bold border-2 rounded-lg px-6 py-2 transition duration-300 hover:bg-[#00B5E2] hover:text-white text-black"
+                style="border-color: #00B5E2;">Beranda</a>
+            <ul class="flex">
+                <li sec:authorize="!isAuthenticated()" class="ml-4">
+                    <a href="/login"
+                        class="font-bold border-2 rounded-lg px-6 py-2 transition duration-300 hover:bg-[#00B5E2] hover:text-white text-black"
+                        style="border-color: #00B5E2;">Login</a>
+                </li>
+                <li sec:authorize="!isAuthenticated()" class="ml-4">
+                    <a href="/register"
+                        class="font-bold border-2 rounded-lg px-6 py-2 transition duration-300 hover:bg-[#00B5E2] hover:text-white text-black"
+                        style="border-color: #00B5E2;">Register</a>
+                </li>
+                <li sec:authorize="isAuthenticated()" class="ml-4">
+                    <a th:href="@{/logout}"
+                        class="font-bold border-2 rounded-lg px-6 py-2 transition duration-300 hover:bg-[#00B5E2] hover:text-white text-black"
+                        style="border-color: #00B5E2;">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main th:fragment="content">
+    </main>
+</body>
+
+</html>

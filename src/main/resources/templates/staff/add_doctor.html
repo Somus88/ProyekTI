@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:sec="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:sec="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head.html :: head" />
+
+<body class="text-gray-900">
+    <nav th:replace="fragments/layout :: header"></nav>
+
+    <main layout:insert="fragments/layout :: content" class="container max-w-xl mx-auto my-4">
+        <!-- Logo Section -->
+        <div class="flex justify-center mb-6">
+            <img th:src="@{/images/Logo klinik agus mantri 4.png}" alt="Klinik Agus Mantri Logo"
+                class="w-[150px] h-[150px]">
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-2xl font-bold mb-6 text-center">Tambah dokter Baru</h2>
+
+            <form th:action="@{/staff/doctors}" th:object="${doctor}" method="post">
+                <div class="mb-4">
+                    <label for="name" class="block text-sm font-bold mb-2">Name</label>
+                    <input type="text" id="name" th:field="*{name}" class="w-full px-3 py-2 border rounded"
+                        style="border-color: #00B5E2;" placeholder="Dr. Jono" required>
+                    <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-red-500 text-xs italic"></p>
+                </div>
+
+                <div class="mb-4">
+                    <label for="username" class="block text-sm font-bold mb-2">Username</label>
+                    <input type="text" id="username" th:field="*{username}" class="w-full px-3 py-2 border rounded"
+                        style="border-color: #00B5E2;" placeholder="Jono" required>
+                    <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}"
+                        class="text-red-500 text-xs italic"></p>
+                </div>
+
+                <div class="mb-4">
+                    <label for="password" class="block text-sm font-bold mb-2">Password</label>
+                    <input type="password" id="password" th:field="*{password}" class="w-full px-3 py-2 border rounded"
+                        style="border-color: #00B5E2;" required>
+                    <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+                        class="text-red-500 text-xs italic"></p>
+                </div>
+
+                <div class="mb-4">
+                    <label for="medicalLicenseId" class="block text-sm font-bold mb-2">ID Lisensi Medis</label>
+                    <input type="text" id="medicalLicenseId" th:field="*{medicalLicenseId}"
+                        class="w-full px-3 py-2 border rounded" style="border-color: #00B5E2;" placeholder="LIC-12345"
+                        required>
+                    <p th:if="${#fields.hasErrors('medicalLicenseId')}" th:errors="*{medicalLicenseId}"
+                        class="text-red-500 text-xs italic"></p>
+                </div>
+
+                <div class="mb-4">
+                    <label for="specialization" class="block text-sm font-bold mb-2">Spesialisasi</label>
+                    <select id="specialization" th:field="*{specialization}" class="w-full px-3 py-2 border rounded"
+                        style="border-color: #00B5E2;" required>
+                        <option value="">Pilih Spesialisasi</option>
+                        <option th:each="spec : ${specializations}" th:value="${spec.id}" th:text="${spec.name}">
+                        </option>
+                    </select>
+                    <p th:if="${#fields.hasErrors('specialization')}" th:errors="*{specialization}"
+                        class="text-red-500 text-xs italic"></p>
+                </div>
+
+                <div class="mb-4">
+                    <label for="scheduleStart" class="block text-sm font-bold mb-2">Jam mulai Jadwal
+                        (Optional)</label>
+                    <input type="time" id="scheduleStart" th:field="*{scheduleStart}"
+                        class="w-full px-3 py-2 border rounded" style="border-color: #00B5E2;">
+                    <p th:if="${#fields.hasErrors('scheduleStart')}" th:errors="*{scheduleStart}"
+                        class="text-red-500 text-xs italic"></p>
+                </div>
+
+                <div class="mb-4">
+                    <label for="scheduleEnd" class="block text-sm font-bold mb-2">Jam tutup Jadwal (Optional)</label>
+                    <input type="time" id="scheduleEnd" th:field="*{scheduleEnd}"
+                        class="w-full px-3 py-2 border rounded" style="border-color: #00B5E2;">
+                    <p th:if="${#fields.hasErrors('scheduleEnd')}" th:errors="*{scheduleEnd}"
+                        class="text-red-500 text-xs italic">
+                    </p>
+                </div>
+
+                <div class="flex items-center justify-between mt-6">
+                    <a th:href="@{/}" class="text-gray-600 hover:text-gray-800">Cancel</a>
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Tambah
+                        Dokter</button>
+                </div>
+            </form>
+        </div>
+    </main>
+</body>
+
+</html>

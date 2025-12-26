@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:sec="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head.html :: head" />
+
+<body class="text-gray-900">
+    <nav th:replace="fragments/layout :: header"></nav>
+
+    <div class="container max-w-4xl mx-auto my-8 px-4">
+        <h1 class="text-2xl font-bold mb-6">Cari Pasien</h1>
+
+        <form method="get" th:action="@{/staff/patients/search}" class="mb-8">
+            <div class="flex gap-4">
+                <input type="text" name="query" class="flex-grow px-4 py-2 border rounded"
+                    placeholder="Search by Name or ID Number..." required>
+                <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Search</button>
+            </div>
+        </form>
+
+        <div th:if="${patients != null}">
+            <h2 class="text-xl font-bold mb-4">Hasil</h2>
+            <div class="bg-white shadow overflow-hidden sm:rounded-md">
+                <ul class="divide-y divide-gray-200">
+                    <li th:each="patient : ${patients}">
+                        <div class="px-4 py-4 sm:px-6 flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-blue-600 truncate" th:text="${patient.name}">Name</p>
+                                <p class="text-sm text-gray-500">
+                                    ID: <span th:text="${patient.idNumber}">123</span> |
+                                    DOB: <span th:text="${patient.dob}">2000-01-01</span>
+                                </p>
+                            </div>
+                            <div>
+                                <a th:href="@{/staff/patients/{id}/book(id=${patient.id})}"
+                                    class="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700">
+                                    Book New Session
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                    <li th:if="${#lists.isEmpty(patients)}" class="px-4 py-4 text-gray-500 text-center">
+                        No patients found.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

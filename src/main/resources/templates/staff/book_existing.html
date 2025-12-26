@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:sec="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:sec="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head.html :: head" />
+
+<body class="text-gray-900">
+    <nav th:replace="fragments/layout :: header"></nav>
+
+    <div class="container max-w-xl mx-auto my-8 px-4">
+        <!-- Logo Section -->
+        <div class="flex justify-center mb-6">
+            <img th:src="@{/images/Logo klinik agus mantri 4.png}" alt="Klinik Agus Mantri Logo"
+                class="w-[150px] h-[150px]">
+        </div>
+
+        <h1 class="text-2xl font-bold mb-6 text-center">Booking Pasien</h1>
+
+        <div class="bg-gray-100 p-4 rounded mb-6">
+            <h2 class="font-bold text-lg mb-2">Detail Pasien</h2>
+            <p><strong>Nama:</strong> <span th:text="${patient.name}"></span></p>
+            <p><strong>Nomor KTP:</strong> <span th:text="${patient.idNumber}"></span></p>
+            <p><strong>Tanggal Lahir:</strong> <span th:text="${patient.dob}"></span></p>
+        </div>
+
+        <form role="form" method="post" th:action="@{/staff/bookings/existing}" th:object="${patient}">
+            <input type="hidden" name="patientId" th:value="${patientId}" />
+
+            <!-- Hidden fields to satisfy validation if needed, though we only update specific ones -->
+            <input type="hidden" th:field="*{name}" />
+            <input type="hidden" th:field="*{email}" />
+            <input type="hidden" th:field="*{age}" />
+            <input type="hidden" th:field="*{dob}" />
+            <input type="hidden" th:field="*{gender}" />
+            <input type="hidden" th:field="*{address}" />
+            <input type="hidden" th:field="*{idNumber}" />
+            <input type="hidden" th:field="*{phoneNumber}" />
+
+            <div class="mb-4">
+                <label for="healthIssue" class="block text-sm font-bold mb-2">Keluhan Baru</label>
+                <textarea id="healthIssue" th:field="*{healthIssue}" class="w-full px-3 py-2 border rounded"
+                    style="border-color: #00B5E2;" required></textarea>
+                <p th:if="${#fields.hasErrors('healthIssue')}" th:errors="*{healthIssue}"
+                    class="text-red-500 text-xs italic"></p>
+            </div>
+
+            <div class="mb-4">
+                <label for="medicationAllergies" class="block text-sm font-bold mb-2">Alergi Obat
+                    (Optional)</label>
+                <input type="text" id="medicationAllergies" th:field="*{medicationAllergies}"
+                    class="w-full px-3 py-2 border rounded" style="border-color: #00B5E2;">
+            </div>
+
+            <div class="mb-4">
+                <label for="bpjsNumber" class="block text-sm font-bold mb-2">Nomor BPJS (Optional)</label>
+                <input type="text" id="bpjsNumber" th:field="*{bpjsNumber}" class="w-full px-3 py-2 border rounded"
+                    style="border-color: #00B5E2;">
+            </div>
+
+            <div class="mb-4">
+                <label for="doctor" class="block text-sm font-bold mb-2">Pilih Dokter</label>
+                <select id="doctor" th:field="*{doctorId}" class="w-full px-3 py-2 border rounded"
+                    style="border-color: #00B5E2;" required>
+                    <option value="">Pilih Dokter</option>
+                    <option th:each="doc : ${doctors}" th:value="${doc.id}"
+                        th:text="${doc.name + ' (' + doc.specialization.name + ')'}"></option>
+                </select>
+                <p th:if="${#fields.hasErrors('doctorId')}" th:errors="*{doctorId}" class="text-red-500 text-xs italic">
+                </p>
+            </div>
+
+            <div class="flex items-center justify-between mt-6">
+                <a th:href="@{/staff/patients/search}" class="text-gray-600 hover:text-gray-800">Kembali Mencari
+                    Pasien</a>
+                <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Booking
+                    Baru</button>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

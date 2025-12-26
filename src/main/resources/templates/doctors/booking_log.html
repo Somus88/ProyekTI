@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:sec="http://www.thymeleaf.org">
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:sec="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head.html :: head" />
+
+<body class="font-sans leading-normal tracking-normal">
+
+    <nav th:replace="fragments/layout :: header"></nav>
+
+    <div class="container mx-auto my-8 px-4">
+        <!-- Logo Section -->
+        <div class="flex justify-center mb-6">
+            <img th:src="@{/images/Logo klinik agus mantri 4.png}" alt="Klinik Agus Mantri Logo"
+                class="w-[150px] h-[150px]">
+        </div>
+
+        <div class="flex items-center justify-between mb-6">
+            <h1 class="text-3xl font-bold text-gray-800">Riwayat Booking</h1>
+            <a th:href="@{/doctors/dashboard}"
+                class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                <i class="bi-arrow-left mr-2"></i>Kembali ke Dashboard
+            </a>
+        </div>
+
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+            <div th:if="${bookings.empty}" class="p-6 text-center text-gray-500 italic">
+                Tidak ada riwayat booking.
+            </div>
+
+            <div th:unless="${bookings.empty}" class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-100 border-b border-gray-200 text-xs uppercase text-gray-600"
+                            style="border-color: #00B5E2;">
+                            <th class="px-6 py-3 font-semibold">Tanggal</th>
+                            <th class="px-6 py-3 font-semibold">Nama Pasien</th>
+                            <th class="px-6 py-3 font-semibold">Keluhan</th>
+                            <th class="px-6 py-3 font-semibold">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-700 text-sm">
+                        <tr th:each="booking : ${bookings}" class="border-b border-gray-200 hover:bg-gray-50"
+                            style="border-color: #00B5E2;">
+                            <td class="px-6 py-4"
+                                th:text="${#temporals.format(booking.createdAt, 'dd MMM yyyy HH:mm')}">
+                                Date
+                            </td>
+                            <td class="px-6 py-4 font-medium text-gray-900" th:text="${booking.patientName}">
+                                Patient Name
+                            </td>
+                            <td class="px-6 py-4">
+                                <span
+                                    th:text="${booking.healthIssue != null ? booking.healthIssue : (booking.patient != null ? booking.patient.healthIssue : 'N/A')}">
+                                    Issue
+                                </span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span
+                                    th:class="${'px-2 inline-flex text-xs leading-5 font-semibold rounded-full ' + 
+                                    (booking.status != null and booking.status.name() == 'WAITING' ? 'bg-yellow-100 text-yellow-800' : 
+                                    (booking.status != null and booking.status.name() == 'TREATING' ? 'bg-blue-100 text-blue-800' : 
+                                    (booking.status != null and booking.status.name() == 'FINISHED' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800')))}"
+                                    th:text="${booking.status}">
+                                    Status
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

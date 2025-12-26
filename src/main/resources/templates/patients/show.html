@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:sec="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head.html :: head" />
+
+<body class="text-gray-900">
+    <nav th:replace="fragments/layout :: header"></nav>
+
+    <div class="container max-w-xl mx-auto my-4">
+        <div class="flex items-center">
+            <img class="rounded-full mr-2"
+                src="https://avataaars.io/?avatarStyle=Circle&topType=LongHairStraight&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Ligh"
+                width="100" height="100" />
+
+            <div>
+                <h4 th:text="${patient.name}" class="text-2xl font-bold" />
+            </div>
+        </div>
+
+        <div class="mt-8 border-b-2 border-gray-500">
+            <button id="activity-btn"
+                class="px-2 py-1 text-sm uppercase border-b-2 border-gray-500 font-bold">Activities</button>
+            <button id="response-btn" class="px-2 py-1 text-sm uppercase border-gray-500">Responses</button>
+        </div>
+
+        <div id="activity-content" class="mt-4">
+            <div th:if="${activities.empty}" class="text-center italic text-sm text-gray-700 mt-8">
+                No activity yet.
+            </div>
+            <div class="mt-4 overflow-y-auto px-4" style="max-height: 60vh;">
+                <div th:each="consultation: ${activities}" class="w-full flex px-2 py-8 border-b border-gray-300">
+                    <div class="w-full">
+                        <div class="flex items-center">
+                            <img class="rounded-full mr-2"
+                                src="https://avataaars.io/?avatarStyle=Circle&topType=LongHairStraight&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Ligh"
+                                width="30" height="30" />
+                            <p class="text-xs" th:text="${patient.name}"></p>
+                        </div>
+
+                        <div class="mt-3">
+                            <div class="flex items-center mb-2">
+                                <a th:href="${'/consultations/' + consultation.id}"
+                                    class="inline-block text-2xl font-bold">
+                                    <h4 th:text="${consultation.title}"></h4>
+                                </a>
+                                <p th:if="${consultation.isResolved}"
+                                    class="m-0 py-1 px-2 bg-green-200 text-green-500 rounded-full font-bold text-xs ml-2">
+                                    Resolved</p>
+                            </div>
+                            <p th:text="${consultation.content}" class="mb-2 text-gray-400"
+                                style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            </p>
+                            <div class="flex items-center text-gray-700">
+                                <div th:each="tag: ${consultation.tags}" th:text="${'#' + tag.name}"
+                                    class="w-auto inline-block text-center mr-1"
+                                    style="font-size: 10px; min-width: 42px;"></div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between items-center mt-4">
+                            <div class="flex items-center">
+                                <p th:text="${#temporals.format(consultation.createdAt, 'dd MMMM YYYY')}"
+                                    class="text-xs m-0 mr-4" />
+                            </div>
+                            <div>
+                                <a th:href="${'/consultations/' + consultation.id}"
+                                    class="rounded-full border border-gray-900 w-auto px-2 py-1 inline-block text-center text-sm ml-2 transition-all duration-150 hover:bg-gray-900 hover:text-white"
+                                    style="min-width: 62px;">
+                                    See More
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="response-content" class="mt-4 overflow-y-auto px-4 hidden" style="max-height: 60vh;">
+            <div th:if="${responses.empty}" class="text-center italic text-sm text-gray-700 mt-8">
+                No given response yet.
+            </div>
+            <div th:each="response: ${responses}" class="py-4 pb-8 mb-4 border-b border-gray-300">
+                <a th:href="${'/consultations/' + response.consultation.id}"
+                    class="mb-2 inline-block text-2xl font-bold">
+                    <h4 th:text="${response.consultation.title}"></h4>
+                </a>
+
+                <div class="pl-3 ml-2 border-l border-gray-300">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center">
+                            <img class="rounded-full mr-2"
+                                src="https://avataaars.io/?avatarStyle=Circle&topType=LongHairStraight&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Ligh"
+                                width="30" height="30" />
+                            <div>
+                                <p class="text-xs block">
+                                    <span th:text="${patient.name}" />
+                                </p>
+                            </div>
+                        </div>
+
+                        <p th:text="${#temporals.format(response.createdAt, 'dd MMMM YYYY HH:mm')}"
+                            class="text-xs text-gray-500 text-right" />
+                    </div>
+                    <p th:text="${response.content}" class="text-justify text-gray-500" />
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    var activityContent = document.getElementById('activity-content');
+    var responseContent = document.getElementById('response-content');
+    var activityBtn = document.getElementById('activity-btn');
+    var responseBtn = document.getElementById('response-btn');
+
+    activityBtn.addEventListener('click', function () {
+        activityContent.classList.remove('hidden');
+        responseContent.classList.add('hidden');
+
+        activityBtn.classList.add('border-b-2');
+        activityBtn.classList.add('font-bold');
+        responseBtn.classList.remove('border-b-2');
+        responseBtn.classList.remove('font-bold');
+    });
+
+    responseBtn.addEventListener('click', function () {
+        activityContent.classList.add('hidden');
+        responseContent.classList.remove('hidden');
+
+        activityBtn.classList.remove('border-b-2');
+        activityBtn.classList.remove('font-bold');
+        responseBtn.classList.add('border-b-2');
+        responseBtn.classList.add('font-bold');
+    });
+</script>
+
+</html>
